@@ -8,6 +8,27 @@ $(document).ready(function(){
     btn.attr('value', keyArray[i]).text(keyArray[i]);
     $('#buttonSec').append(btn);
   }
+
+  //Function to animate gifts
+  $('.gif').on('click', function(){
+    console.log("im here");
+    var state = $(this).attr('data-state').val();
+    var animateState = $(this).attr('data-animate');
+    var stillState = $(this).attr('data-still');
+
+    if(state === 'still'){    // Verify if is already in still state change to animate
+      $(this).attr('src',animateState);
+      $(this).attr('data-state', 'animate');
+
+    }
+
+    if(state === 'animate'){
+      $(this).attr('src',stillState);
+      $(this).attr('data-state', 'still');
+
+    }
+
+  }); // Gif Click function
  
   //Function to detect a button has click
    $('button').on('click', function() {
@@ -28,10 +49,10 @@ $(document).ready(function(){
         var urlSource = response.data[j].images.fixed_height_still.url;
         
         var urlAnimate = response.data[j].images.fixed_height.url;
-        console.log(urlAnimate);
+        
         var giftCard = $('<div>').addClass('card');
         var ratingTitle  = $('<div>').addClass('card-body').text('Rating: ' + rating);
-        var imgContent = $('<img>').addClass('gift card-img-bottom');
+        var imgContent = $('<img>').addClass('gif card-img-bottom');
         imgContent.attr('src',urlSource);
         imgContent.attr({                                     // Add attributes to the image
                 src : urlSource,
@@ -42,13 +63,36 @@ $(document).ready(function(){
          giftCard.append(ratingTitle);
          giftCard.append(imgContent);
 
-        $('#giftSec').append(giftCard);
+        $('#gifSec').append(giftCard);
 
        } // For Pull images and create entries in DOM
 
      });// Then
 
    });//button click function
+
+  //Function to animate gifts
+  $(document).on('click', '.gif', function(){
+    
+    var state = $(this).attr('data-state');
+    console.log(state);
+    var animateState = $(this).attr('data-animate');
+    var stillState = $(this).attr('data-still');
+
+    if(state === 'still'){    // Verify if is already in still state change to animate
+      $(this).attr('src',animateState);
+      $(this).attr('data-state', 'animate');
+
+    }
+
+    if(state === 'animate'){
+      $(this).attr('src',stillState);
+      $(this).attr('data-state', 'still');
+
+    }
+
+  }); // Gif Click function
+
 
 
 }); //ready
