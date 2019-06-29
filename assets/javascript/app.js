@@ -1,17 +1,30 @@
 $(document).ready(function(){
 
-  let keyArray = ['surf','fencing', 'running','swimming', 'ski'];
+  let topics = ['surf','fencing', 'running','swimming', 'skiing', 'skating','windsurf','cycling','hiking','diving','roading'];
 
   // Generates the buttons with keys of keyArray
-  for (let i=0; i < keyArray.length; i++){
-    var btn = $('<button>');
-    btn.attr('value', keyArray[i]).text(keyArray[i]);
-    $('#buttonSec').append(btn);
-  }
+  function btnGenerator(){
+    $('#buttonSec').empty();
+    for (let i=0; i < topics.length; i++){
+      var btn = $('<button>').addClass('btn-topic');
+      btn.attr('value', topics[i]).text(topics[i]);
+      $('#buttonSec').append(btn);
+    }
+  };// Func generate buttons
+
+ btnGenerator();
+
+   // Function to add new topic
+   $('#submit').on('click', function(){
+    var newTopicVal = $('.newTopic').val();
+    topics.push(newTopicVal);
+    btnGenerator();
+
+  }); //Func add new topic
 
   //Function to animate gifts
   $('.gif').on('click', function(){
-    console.log("im here");
+    
     var state = $(this).attr('data-state').val();
     var animateState = $(this).attr('data-animate');
     var stillState = $(this).attr('data-still');
@@ -31,11 +44,13 @@ $(document).ready(function(){
   }); // Gif Click function
  
   //Function to detect a button has click
-   $('button').on('click', function() {
+  $(document).on('click', '.btn-topic', function() {
+    console.log("im here");
+    $('#gifSec').empty();
      var keyWord = $(this).val();
      
      var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord +'&limit=10&offset=0&rating=PG&lang=en';
-     
+     console.log(queryUrl);
      $.ajax({
        url: queryUrl,
        method: "GET"
@@ -46,9 +61,9 @@ $(document).ready(function(){
       for (let j = 0; j < imagesArray; j++){
         var rating = response.data[j].rating
         
-        var urlSource = response.data[j].images.fixed_height_still.url;
+        var urlSource = response.data[j].images.fixed_height_small_still.url;
         
-        var urlAnimate = response.data[j].images.fixed_height.url;
+        var urlAnimate = response.data[j].images.fixed_height_small.url;
         
         var giftCard = $('<div>').addClass('card');
         var ratingTitle  = $('<div>').addClass('card-body').text('Rating: ' + rating);
@@ -58,7 +73,9 @@ $(document).ready(function(){
                 src : urlSource,
                 'data-still' : urlSource,
                 'data-animate' : urlAnimate,
-                'data-state' : 'still'
+                'data-state' : 'still',
+                'heigh' : 200,
+                'width' : 200
            });
          giftCard.append(ratingTitle);
          giftCard.append(imgContent);
@@ -73,9 +90,10 @@ $(document).ready(function(){
 
   //Function to animate gifts
   $(document).on('click', '.gif', function(){
+   
     
     var state = $(this).attr('data-state');
-    console.log(state);
+  
     var animateState = $(this).attr('data-animate');
     var stillState = $(this).attr('data-still');
 
@@ -92,7 +110,5 @@ $(document).ready(function(){
     }
 
   }); // Gif Click function
-
-
 
 }); //ready
