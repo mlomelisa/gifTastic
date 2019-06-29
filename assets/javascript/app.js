@@ -16,9 +16,20 @@ $(document).ready(function(){
 
    // Function to add new topic
    $('#submit').on('click', function(){
-    var newTopicVal = $('.newTopic').val();
-    topics.push(newTopicVal);
-    btnGenerator();
+    var newTopicVal = $('#newTopic').val();
+    
+    if(newTopicVal.length == 0 ){
+     
+      alert('Please enter a word without whitespace characters')
+      
+    }else {
+      topics.push(newTopicVal);
+      jQuery.uniqueSort(topics);
+
+      btnGenerator();
+      
+    }
+   
 
   }); //Func add new topic
 
@@ -45,11 +56,11 @@ $(document).ready(function(){
  
   //Function to detect a button has click
   $(document).on('click', '.btn-topic', function() {
-    console.log("im here");
+    
     $('#gifSec').empty();
      var keyWord = $(this).val();
-     
-     var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord +'&limit=10&offset=0&rating=PG&lang=en';
+     var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord +'&limit=10&offset=0&lang=en';
+    //  var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord +'&limit=10&offset=0&rating=PG&lang=en';
      console.log(queryUrl);
      $.ajax({
        url: queryUrl,
