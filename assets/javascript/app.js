@@ -1,19 +1,33 @@
 $(document).ready(function(){
+  let topics = [];
+  topics= JSON.parse(localStorage.getItem('savedArray'));
 
-  let topics = ['surf','fencing', 'running','swimming', 'skiing', 'skating','windsurf','cycling','hiking','diving','roading'];
+  
 
+ 
+
+ if(!Array.isArray(topics)){
+  console.log('or im here');
+  topics = ['surf','fencing', 'running','swimming', 'skiing', 'skating','windsurf','cycling','hiking','diving','roading'];
+  btnGenerator();
+ }
+
+ btnGenerator();
   // Generates the buttons with keys of keyArray
   function btnGenerator(){
     $('#buttonSec').empty();
+    
     for (let i=0; i < topics.length; i++){
       var btn = $('<button>').addClass('btn-topic');
       btn.attr('value', topics[i]).text(topics[i]);
       $('#buttonSec').append(btn);
+      localStorage.setItem('savedArray', JSON.stringify(topics));
     }
   };// Func generate buttons
 
- btnGenerator();
+ 
 
+ 
    // Function to add new topic
    $('#submit').on('click', function(){
     var newTopicVal = $('#newTopic').val();
@@ -27,7 +41,10 @@ $(document).ready(function(){
       jQuery.uniqueSort(topics);
 
       btnGenerator();
+      $('#newTopic').val('');
+      localStorage.setItem('savedArray', JSON.stringify(topics));
       
+     
     }
    
 
@@ -60,7 +77,7 @@ $(document).ready(function(){
     $('#gifSec').empty();
      var keyWord = $(this).val();
      var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord +'&limit=10&offset=0&lang=en';
-    //  var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord +'&limit=10&offset=0&rating=PG&lang=en';
+    
      console.log(queryUrl);
      $.ajax({
        url: queryUrl,
@@ -70,14 +87,15 @@ $(document).ready(function(){
       var imagesArray = response.data.length;
      
       for (let j = 0; j < imagesArray; j++){
-        var rating = response.data[j].rating
+        var rating = response.data[j].rating;
+        var title = response.data[j].title;
         
         var urlSource = response.data[j].images.fixed_height_small_still.url;
         
         var urlAnimate = response.data[j].images.fixed_height_small.url;
         
         var giftCard = $('<div>').addClass('card');
-        var ratingTitle  = $('<div>').addClass('card-body').text('Rating: ' + rating);
+        var ratingTitle  = $('<div>').addClass('card-body').text(title +' ' +'Rating: ' + rating);
         var imgContent = $('<img>').addClass('gif card-img-bottom');
         imgContent.attr('src',urlSource);
         imgContent.attr({                                     // Add attributes to the image
@@ -85,8 +103,7 @@ $(document).ready(function(){
                 'data-still' : urlSource,
                 'data-animate' : urlAnimate,
                 'data-state' : 'still',
-                'heigh' : 200,
-                'width' : 200
+ 
            });
          giftCard.append(ratingTitle);
          giftCard.append(imgContent);
@@ -121,5 +138,7 @@ $(document).ready(function(){
     }
 
   }); // Gif Click function
+
+  // topics = JSON.parse(localStorage.getItem('savedArray'));
 
 }); //ready

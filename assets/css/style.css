@@ -1,15 +1,13 @@
 .card {
   display: inline-block;
+  margin-top: 10px;
   
 }
 
-#entrySec{
+#entrySec {
   margin-top: 20px;
   display: inline-block;
   float: right;
  
 }
 
-label{
-  
-}
