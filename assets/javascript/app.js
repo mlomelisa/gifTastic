@@ -3,9 +3,6 @@ $(document).ready(function(){
   topics= JSON.parse(localStorage.getItem('savedArray'));
 
   
-
- 
-
  if(!Array.isArray(topics)){
   console.log('or im here');
   topics = ['surf','fencing', 'running','swimming', 'skiing', 'skating','windsurf','cycling','hiking','diving','roading'];
@@ -90,13 +87,16 @@ $(document).ready(function(){
         var rating = response.data[j].rating;
         var title = response.data[j].title;
         
-        var urlSource = response.data[j].images.fixed_height_small_still.url;
+        var urlSource = response.data[j].images.fixed_height_still.url;
         
-        var urlAnimate = response.data[j].images.fixed_height_small.url;
+        var urlAnimate = response.data[j].images.fixed_height.url;
         
         var giftCard = $('<div>').addClass('card');
-        var ratingTitle  = $('<div>').addClass('card-body').text(title +' ' +'Rating: ' + rating);
+        var titleVar  = $('<div>').addClass('card-body').text(title);
         var imgContent = $('<img>').addClass('gif card-img-bottom');
+        var ratingVar = $('<div>').addClass('card-body');
+        var p = $('<p>').addClass('card-text').text('Rating: ' + rating);
+        ratingVar.append(p);
         imgContent.attr('src',urlSource);
         imgContent.attr({                                     // Add attributes to the image
                 src : urlSource,
@@ -105,8 +105,9 @@ $(document).ready(function(){
                 'data-state' : 'still',
  
            });
-         giftCard.append(ratingTitle);
+         giftCard.append(titleVar);
          giftCard.append(imgContent);
+         giftCard.append(ratingVar);
 
         $('#gifSec').append(giftCard);
 
