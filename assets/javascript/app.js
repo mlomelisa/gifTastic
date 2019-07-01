@@ -1,5 +1,8 @@
 $(document).ready(function(){
+  var offsetVal = 0;
+  
   let topics = [];
+  
   topics= JSON.parse(localStorage.getItem('savedArray'));
 
   
@@ -10,6 +13,7 @@ $(document).ready(function(){
  }
 
  btnGenerator();
+ 
   // Generates the buttons with keys of keyArray
   function btnGenerator(){
     $('#buttonSec').empty();
@@ -22,6 +26,10 @@ $(document).ready(function(){
     }
   };// Func generate buttons
 
+  
+ 
+ 
+ 
  
 
  
@@ -40,10 +48,7 @@ $(document).ready(function(){
       btnGenerator();
       $('#newTopic').val('');
       localStorage.setItem('savedArray', JSON.stringify(topics));
-      
-     
     }
-   
 
   }); //Func add new topic
 
@@ -68,14 +73,27 @@ $(document).ready(function(){
 
   }); // Gif Click function
  
-  //Function to detect a button has click
-  $(document).on('click', '.btn-topic', function() {
-    
+ 
+
+ //Function to detect a button has click
+
+
+ $(document).on('click', '.btn-topic', function() {
+  offsetVal = 0;
     $('#gifSec').empty();
      var keyWord = $(this).val();
-     var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord +'&limit=10&offset=0&lang=en';
+
+ // Function add more Gifs
+ 
+  
+ 
     
-     console.log(queryUrl);
+    
+    var generatorGifs = function () {
+      var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord + '&limit=10&offset=' + offsetVal +'&lang=en';
+      console.log(queryUrl);
+   
+     
      $.ajax({
        url: queryUrl,
        method: "GET"
@@ -115,7 +133,23 @@ $(document).ready(function(){
 
      });// Then
 
+    } // generatorGifs function
+    
+    $('#btnAdd').off('click').click(function(){
+      
+      offsetVal +=10;
+      
+      generatorGifs();
+      
+  
+    }); // Custom Select
+
+    generatorGifs();
+   
    });//button click function
+
+ 
+
 
   //Function to animate gifts
   $(document).on('click', '.gif', function(){
@@ -140,6 +174,9 @@ $(document).ready(function(){
 
   }); // Gif Click function
 
-  // topics = JSON.parse(localStorage.getItem('savedArray'));
 
+ 
+
+ 
+  
 }); //ready
