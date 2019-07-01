@@ -1,6 +1,6 @@
 $(document).ready(function(){
   var offsetVal = 0;
-  
+  var checkboxNum = 0;
   let topics = [];
   
   topics= JSON.parse(localStorage.getItem('savedArray'));
@@ -25,12 +25,6 @@ $(document).ready(function(){
       localStorage.setItem('savedArray', JSON.stringify(topics));
     }
   };// Func generate buttons
-
-  
- 
- 
- 
- 
 
  
    // Function to add new topic
@@ -102,6 +96,7 @@ $(document).ready(function(){
       var imagesArray = response.data.length;
      
       for (let j = 0; j < imagesArray; j++){
+
         var rating = response.data[j].rating;
         var title = response.data[j].title;
         
@@ -109,6 +104,21 @@ $(document).ready(function(){
         
         var urlAnimate = response.data[j].images.fixed_height.url;
         
+        // Checkbox section
+    
+        var checkboxVar = $('<div>').addClass('custom-control custom-checkbox');
+        var checkboxInp = $('<input>').attr({
+          type: 'checkbox',
+          id: 'check' + checkboxNum
+        });
+        checkboxInp.addClass('custom-control-input');
+        var checkLabel = $('<label>').addClass('custom-control-label')
+        checkLabel.attr('for','check' + checkboxNum).text('Add Favorites');
+        checkboxVar.append(checkboxInp);
+        checkboxVar.append(checkLabel);
+        //
+
+
         var giftCard = $('<div>').addClass('card');
         var titleVar  = $('<div>').addClass('card-body').text(title);
         var imgContent = $('<img>').addClass('gif card-img-bottom');
@@ -124,11 +134,14 @@ $(document).ready(function(){
  
            });
          giftCard.append(titleVar);
+         
          giftCard.append(imgContent);
          giftCard.append(ratingVar);
+         giftCard.append(checkboxVar);
 
         $('#gifSec').append(giftCard);
 
+        checkboxNum++;
        } // For Pull images and create entries in DOM
 
      });// Then
@@ -138,6 +151,7 @@ $(document).ready(function(){
     $('#btnAdd').off('click').click(function(){
       
       offsetVal +=10;
+      checkboxNum +=10;
       
       generatorGifs();
       
@@ -145,6 +159,8 @@ $(document).ready(function(){
     }); // Custom Select
 
     generatorGifs();
+
+   
    
    });//button click function
 
