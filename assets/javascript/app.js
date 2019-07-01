@@ -1,16 +1,8 @@
 $(document).ready(function(){
   var offsetVal = 0;
   var checkboxNum = 0;
-  let topics = [];
-  
-  topics= JSON.parse(localStorage.getItem('savedArray'));
+  let topics = ['surf','fencing', 'running','swimming', 'skiing', 'skating','windsurf','cycling','hiking','diving','roading'];
 
-  
- if(!Array.isArray(topics)){
-  console.log('or im here');
-  topics = ['surf','fencing', 'running','swimming', 'skiing', 'skating','windsurf','cycling','hiking','diving','roading'];
-  btnGenerator();
- }
 
  btnGenerator();
  
@@ -22,7 +14,7 @@ $(document).ready(function(){
       var btn = $('<button>').addClass('btn-topic');
       btn.attr('value', topics[i]).text(topics[i]);
       $('#buttonSec').append(btn);
-      localStorage.setItem('savedArray', JSON.stringify(topics));
+      
     }
   };// Func generate buttons
 
@@ -41,7 +33,7 @@ $(document).ready(function(){
 
       btnGenerator();
       $('#newTopic').val('');
-      localStorage.setItem('savedArray', JSON.stringify(topics));
+     
     }
 
   }); //Func add new topic
@@ -189,10 +181,5 @@ $(document).ready(function(){
     }
 
   }); // Gif Click function
-
-
- 
-
- 
   
 }); //ready
