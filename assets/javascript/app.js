@@ -1,6 +1,7 @@
 $(document).ready(function(){
   var offsetVal = 0;
   var checkboxNum = 0;
+  var favoritesArray = [];
   let topics = ['surf','fencing', 'running','swimming', 'skiing', 'skating','windsurf','cycling','hiking','diving','roading'];
 
 
@@ -66,14 +67,13 @@ $(document).ready(function(){
 
  $(document).on('click', '.btn-topic', function() {
   offsetVal = 0;
+  checkboxNum = 0;
     $('#gifSec').empty();
      var keyWord = $(this).val();
 
  // Function add more Gifs
  
-  
- 
-    
+   
     
     var generatorGifs = function () {
       var queryUrl = 'https://api.giphy.com/v1/gifs/search?api_key=koHETa6OSaTbs5R8mCoDih5i6Wh6pciU&q=' + keyWord + '&limit=10&offset=' + offsetVal +'&lang=en';
@@ -96,26 +96,24 @@ $(document).ready(function(){
         
         var urlAnimate = response.data[j].images.fixed_height.url;
         
-        // Checkbox section
-    
-        var checkboxVar = $('<div>').addClass('custom-control custom-checkbox');
-        var checkboxInp = $('<input>').attr({
-          type: 'checkbox',
-          id: 'check' + checkboxNum
-        });
-        checkboxInp.addClass('custom-control-input');
-        var checkLabel = $('<label>').addClass('custom-control-label')
-        checkLabel.attr('for','check' + checkboxNum).text('Add Favorites');
-        checkboxVar.append(checkboxInp);
-        checkboxVar.append(checkLabel);
-        //
 
+        // Add button
+        var btnAddFav = $('<button>').addClass("btn btn-primary btnAddFav");
+        btnAddFav.attr({
+          'data-id' : checkboxNum,
+          type: 'button'
+        });
+        btnAddFav.text("Add Favorites");
+        
 
         var giftCard = $('<div>').addClass('card');
-        var titleVar  = $('<div>').addClass('card-body').text(title);
+        giftCard.attr('data-id', checkboxNum);
+        var titleVar  = $('<div>').addClass('card-body title').text(title);
+        titleVar.attr('name',title);
         var imgContent = $('<img>').addClass('gif card-img-bottom');
-        var ratingVar = $('<div>').addClass('card-body');
+        var ratingVar = $('<div>').addClass('card-body rating');
         var p = $('<p>').addClass('card-text').text('Rating: ' + rating);
+        ratingVar.attr('name',rating);
         ratingVar.append(p);
         imgContent.attr('src',urlSource);
         imgContent.attr({                                     // Add attributes to the image
@@ -129,7 +127,7 @@ $(document).ready(function(){
          
          giftCard.append(imgContent);
          giftCard.append(ratingVar);
-         giftCard.append(checkboxVar);
+         giftCard.append(btnAddFav);
 
         $('#gifSec').append(giftCard);
 
@@ -143,18 +141,18 @@ $(document).ready(function(){
     $('#btnAdd').off('click').click(function(){
       
       offsetVal +=10;
-      checkboxNum +=10;
       
       generatorGifs();
       
   
-    }); // Custom Select
+    }); // ButtonAdd Custom Select
 
     generatorGifs();
+   
+        
+   
 
-   
-   
-   });//button click function
+   });// click function
 
  
 
@@ -181,5 +179,35 @@ $(document).ready(function(){
     }
 
   }); // Gif Click function
+
   
+
+  
+
+  // Function to add favorites to localstorage
+
+
+    $(document).on('click', ".btnAddFav" , function (){
+     console.log("Im here?");
+
+      
+    var checkID = $(this).attr('data-id');
+    console.log(checkID);
+        
+     var titleFav= $(this).siblings('.title').attr('name');
+     var imgFav= $(this).siblings('.gif').attr('src');
+     var ratingFav=$(this).siblings('.rating').attr('name');
+
+     $(this).attr('state', 'checked');
+     
+     console.log(titleFav + " " + imgFav + " " + ratingFav);
+        
+     favoritesArray.push({'title' : titleFav, 'img':imgFav, 'rating': ratingFav});
+  
+     console.log( favoritesArray);
+    
+ 
+
+   }); // Checkbox function
+
 }); //ready

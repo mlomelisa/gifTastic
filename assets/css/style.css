@@ -12,8 +12,10 @@
   margin-top: 20px;
   display: inline-block;
   float: right;
+  
  
 }
+
 
 @media screen and (max-width:680px){
   body {
