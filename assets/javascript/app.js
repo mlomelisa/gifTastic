@@ -91,7 +91,7 @@ $(document).ready(function(){
       for (let j = 0; j < imagesArray; j++){
 
         var rating = response.data[j].rating;
-        var title = response.data[j].title;
+        var title = (response.data[j].title).toUpperCase();
         
         var urlSource = response.data[j].images.fixed_height_still.url;
         
@@ -191,11 +191,12 @@ $(document).ready(function(){
      var imgFav = $(this).siblings('.gif').attr('src');
      var ratingFav = $(this).siblings('.rating').attr('name');
      var imganimate = $(this).siblings('.gif').attr('data-animate');
-
+     var imgStill = $(this).siblings('.gif').attr('data-still');
+     var dataState = $(this).siblings('.gif').attr('data-state');
      $(this).attr('state', 'checked');
    
         
-     favoritesArray.push({'title' : titleFav, 'img':imgFav, 'rating': ratingFav, 'imganimate':imganimate});
+     favoritesArray.push({'title' : titleFav, 'img':imgFav, 'rating': ratingFav, 'imganimate':imganimate, 'imgStill':imgStill, 'dataState':dataState});
   
       
      localStorage.setItem('favorites', JSON.stringify(favoritesArray));
@@ -212,9 +213,9 @@ function addFavGifs(){
     
     var ratingFav = favoritesArray[k].rating;
     var titleFav = favoritesArray[k].title;
-    
+    var dataState = favoritesArray[k].dataState;
     var urlSourceFav = favoritesArray[k].img;
-    
+    var imgStillFav = favoritesArray[k].imgStill;
     var imgAnimfav = favoritesArray[k].imganimate;
     
   
@@ -222,7 +223,7 @@ function addFavGifs(){
     btnDelFav.attr({
       type: 'button'
     });
-    btnDelFav.text("Delete Favorites");
+    btnDelFav.text("Delete from Favorites");
     
 
     var giftCardFav = $('<div>').addClass('card');
@@ -236,9 +237,9 @@ function addFavGifs(){
     ratingVarFav.append(pFav);
     // imgContent.attr('src',urlSourceFav);
     imgContentFav.attr({                                     // Add attributes to the image
-            src : urlSourceFav,
-            'data-still' : urlSourceFav,
-            'data-animate' : imgAnimfav,
+            src : imgStillFav,
+            'data-still' : imgStillFav,
+            'data-animate': imgAnimfav,
             'data-state' : 'still',
 
        });
