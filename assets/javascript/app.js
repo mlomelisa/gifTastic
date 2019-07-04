@@ -1,9 +1,10 @@
 $(document).ready(function(){
   var offsetVal = 0;
   var checkboxNum = 0;
-  var favoritesArray = [];
-  let topics = ['surf','fencing', 'running','swimming', 'skiing', 'skating','windsurf','cycling','hiking','diving','roading'];
-
+  var topics = ['swimming', 'running', 'skating', 'diving', 'fencing', 'hiking', 'cycling', 'skying'];
+  var favoritesArray = localStorage.getItem('favorites') ? JSON.parse(localStorage.getItem('favorites')) : [];
+  
+  addFavGifs();
 
  btnGenerator();
  
@@ -115,7 +116,7 @@ $(document).ready(function(){
         var p = $('<p>').addClass('card-text').text('Rating: ' + rating);
         ratingVar.attr('name',rating);
         ratingVar.append(p);
-        imgContent.attr('src',urlSource);
+        // imgContent.attr('src',urlSource);
         imgContent.attr({                                     // Add attributes to the image
                 src : urlSource,
                 'data-still' : urlSource,
@@ -148,13 +149,9 @@ $(document).ready(function(){
     }); // ButtonAdd Custom Select
 
     generatorGifs();
-   
-        
-   
+     
 
    });// click function
-
- 
 
 
   //Function to animate gifts
@@ -180,34 +177,94 @@ $(document).ready(function(){
 
   }); // Gif Click function
 
-  
-
-  
 
   // Function to add favorites to localstorage
-
-
-    $(document).on('click', ".btnAddFav" , function (){
-     console.log("Im here?");
-
-      
-    var checkID = $(this).attr('data-id');
-    console.log(checkID);
-        
-     var titleFav= $(this).siblings('.title').attr('name');
-     var imgFav= $(this).siblings('.gif').attr('src');
-     var ratingFav=$(this).siblings('.rating').attr('name');
-
-     $(this).attr('state', 'checked');
-     
-     console.log(titleFav + " " + imgFav + " " + ratingFav);
-        
-     favoritesArray.push({'title' : titleFav, 'img':imgFav, 'rating': ratingFav});
-  
-     console.log( favoritesArray);
-    
  
 
+    $(document).on('click', ".btnAddFav" , function (){
+    
+    if($(this).attr('state') === 'checked'){
+      alert('You already has this gift in your favorites')
+    } else{
+
+     var titleFav = $(this).siblings('.title').attr('name');
+     var imgFav = $(this).siblings('.gif').attr('src');
+     var ratingFav = $(this).siblings('.rating').attr('name');
+     var imganimate = $(this).siblings('.gif').attr('data-animate');
+
+     $(this).attr('state', 'checked');
+   
+        
+     favoritesArray.push({'title' : titleFav, 'img':imgFav, 'rating': ratingFav, 'imganimate':imganimate});
+  
+      
+     localStorage.setItem('favorites', JSON.stringify(favoritesArray));
+     addFavGifs();
+    }
+     
    }); // Checkbox function
+    console.log(favoritesArray)
+
+  //Function generate gifts in favorites section
+function addFavGifs(){
+  $('#favSec').empty();
+  for (let k = 0; k < favoritesArray.length; k++){
+    
+    var ratingFav = favoritesArray[k].rating;
+    var titleFav = favoritesArray[k].title;
+    
+    var urlSourceFav = favoritesArray[k].img;
+    
+    var imgAnimfav = favoritesArray[k].imganimate;
+    
+  
+    var btnDelFav = $('<button>').addClass("btn btn-primary btnDelFav");
+    btnDelFav.attr({
+      type: 'button'
+    });
+    btnDelFav.text("Delete Favorites");
+    
+
+    var giftCardFav = $('<div>').addClass('card');
+    giftCardFav.attr('data-id', k);
+    var titleVarFav  = $('<div>').addClass('card-body title').text(titleFav);
+    titleVarFav.attr('name',titleFav);
+    var imgContentFav = $('<img>').addClass('gif card-img-bottom');
+    var ratingVarFav = $('<div>').addClass('card-body rating');
+    var pFav = $('<p>').addClass('card-text').text('Rating: ' + ratingFav);
+    ratingVarFav.attr('name',ratingFav);
+    ratingVarFav.append(pFav);
+    // imgContent.attr('src',urlSourceFav);
+    imgContentFav.attr({                                     // Add attributes to the image
+            src : urlSourceFav,
+            'data-still' : urlSourceFav,
+            'data-animate' : imgAnimfav,
+            'data-state' : 'still',
+
+       });
+     giftCardFav.append(titleVarFav);
+     
+     giftCardFav.append(imgContentFav);
+     giftCardFav.append(ratingVarFav);
+     giftCardFav.append(btnDelFav);
+
+    $('#favSec').append(giftCardFav);
+
+   
+  } // For
+}; // Function addFavGifs
+
+// Delete Button in Favorites 
+
+  $(document).on('click', ".btnDelFav" , function (){
+    var idFavtoDelete = $(this).parent('.card').attr('data-id');
+    console.log(idFavtoDelete);
+    favoritesArray.splice(idFavtoDelete, 1);
+    $(this).parent('.card').remove();
+    localStorage.setItem('favorites', JSON.stringify(favoritesArray));
+    addFavGifs();
+  });
+
+  
 
 }); //ready
