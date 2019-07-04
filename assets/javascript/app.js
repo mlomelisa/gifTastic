@@ -3,6 +3,7 @@ $(document).ready(function(){
   var checkboxNum = 0;
   var topics = ['swimming', 'running', 'skating', 'diving', 'fencing', 'hiking', 'cycling', 'skying'];
   var favoritesArray = localStorage.getItem('favorites') ? JSON.parse(localStorage.getItem('favorites')) : [];
+  var idFavtoDelete;
   
   addFavGifs();
 
@@ -182,17 +183,20 @@ $(document).ready(function(){
  
 
     $(document).on('click', ".btnAddFav" , function (){
+      var titleFav = $(this).siblings('.title').attr('name');
+      var imgFav = $(this).siblings('.gif').attr('src');
+      var ratingFav = $(this).siblings('.rating').attr('name');
+      var imganimate = $(this).siblings('.gif').attr('data-animate');
+      var imgStill = $(this).siblings('.gif').attr('data-still');
+      var dataState = $(this).siblings('.gif').attr('data-state');
+
+  
     
-    if($(this).attr('state') === 'checked'){
+    if($(this).attr('state') === 'checked' )  {
       alert('You already has this gift in your favorites')
     } else{
 
-     var titleFav = $(this).siblings('.title').attr('name');
-     var imgFav = $(this).siblings('.gif').attr('src');
-     var ratingFav = $(this).siblings('.rating').attr('name');
-     var imganimate = $(this).siblings('.gif').attr('data-animate');
-     var imgStill = $(this).siblings('.gif').attr('data-still');
-     var dataState = $(this).siblings('.gif').attr('data-state');
+    
      $(this).attr('state', 'checked');
    
         
@@ -258,7 +262,7 @@ function addFavGifs(){
 // Delete Button in Favorites 
 
   $(document).on('click', ".btnDelFav" , function (){
-    var idFavtoDelete = $(this).parent('.card').attr('data-id');
+    idFavtoDelete = $(this).parent('.card').attr('data-id');
     console.log(idFavtoDelete);
     favoritesArray.splice(idFavtoDelete, 1);
     $(this).parent('.card').remove();
